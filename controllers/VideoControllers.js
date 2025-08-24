@@ -685,10 +685,9 @@ export const deleteVideo = async (req, res) => {
   const { id } = req.params;
 
   try {
-    // Check if user role is member
-    if (req.role === "member") {
+    if (req.user && req.user.role.slug === "member") {
       return res.status(403).json({
-        message: "Access denied. Members cannot delete videos.",
+        message: "Members are not authorized to update videos",
       });
     }
 
@@ -698,13 +697,6 @@ export const deleteVideo = async (req, res) => {
 
     if (!video) {
       return res.status(404).json({ message: "Video not found" });
-    }
-
-    // Check ownership (admin can delete any video, others only their own)
-    if (video.userId !== req.userId && req.role !== "admin") {
-      return res.status(403).json({
-        message: "Access denied. You can only delete your own videos.",
-      });
     }
 
     await video.destroy();
