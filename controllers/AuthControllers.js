@@ -25,7 +25,7 @@ export const Register = async (req, res) => {
 
   try {
     // Get default role and membership
-    const defaultRole = await Roles.findOne({ where: { slug: "user" } }); // Adjust slug as needed
+    const defaultRole = await Roles.findOne({ where: { slug: "member" } }); // Adjust slug as needed
     const defaultMembership = await Memberships.findOne({
       where: { slug: "free" },
     }); // Adjust slug as needed
@@ -35,6 +35,8 @@ export const Register = async (req, res) => {
         message: "Default role or membership not found",
       });
     }
+
+    console.log(defaultMembership);
 
     await User.create({
       name: name,
